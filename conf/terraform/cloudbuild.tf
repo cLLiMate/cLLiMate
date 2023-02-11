@@ -17,8 +17,7 @@ resource "google_project_iam_member" "cloudbuild" {
 
 resource "google_cloudbuild_trigger" "default" {
   for_each = {
-    deploy-site-next = {
-      filename_prefix = "deploy-site"
+    deploy-site = {
       branch          = "^main$"
       substitutions   = { _NAMESPACE = "live" }
     }
