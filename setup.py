@@ -15,4 +15,9 @@ setuptools.setup(
         "pyarrow",
         "flask",
     ],
+    extras_require={
+        "prod": [
+            "gunicorn",
+        ]
+    },
 )
