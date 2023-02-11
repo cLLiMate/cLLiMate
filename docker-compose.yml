@@ -23,6 +23,8 @@ services:
       - ./:/app
       - ${GCLOUD_CONFIG_PATH:-~/.config/gcloud}:/root/.config/gcloud
     command: uvicorn cllimate.api:app --port 4001 --host 0.0.0.0 --reload
+    environment:
+      - TWILIO_AUTH_TOKEN
   site:
     build:
       dockerfile: docker/Dockerfile.site

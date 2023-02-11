@@ -17,6 +17,8 @@ setuptools.setup(
         "gensim",
         "nltk",
         "openai",
+        "twilio",
+        "python-multipart"
     ],
     extras_require={
         "prod": [
