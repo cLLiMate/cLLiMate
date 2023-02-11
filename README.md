@@ -17,7 +17,7 @@ Set up your gcloud credentials;
 
 ```bash
 gcloud auth login
-gcloud config set project cLLiMate
+gcloud config set project cllimate
 ```
 
 Then up and download data with gsutil at the root of the project:
