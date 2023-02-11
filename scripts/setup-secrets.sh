@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # read keys from the sops file relative to this script and export then as env vars
 
-set -e
-
 # get the directory of this script
 cd $(dirname $0)/..
 

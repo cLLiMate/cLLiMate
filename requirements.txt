@@ -4,10 +4,26 @@
 #
 #    pip-compile --all-extras
 #
+aiohttp==3.8.3
+    # via openai
+aiosignal==1.3.1
+    # via aiohttp
 anyio==3.6.2
     # via starlette
+async-timeout==4.0.2
+    # via aiohttp
+attrs==22.2.0
+    # via aiohttp
+certifi==2022.12.7
+    # via requests
+charset-normalizer==2.1.1
+    # via
+    #   aiohttp
+    #   requests
 click==8.1.3
-    # via uvicorn
+    # via
+    #   nltk
+    #   uvicorn
 contourpy==1.0.7
     # via matplotlib
 cycler==0.11.0
@@ -16,35 +32,69 @@ fastapi==0.91.0
     # via cLLiMate (setup.py)
 fonttools==4.38.0
     # via matplotlib
+frozenlist==1.3.3
+    # via
+    #   aiohttp
+    #   aiosignal
+fst-pso==1.8.1
+    # via pyfume
+fuzzytm==2.0.5
+    # via gensim
+gensim==4.3.0
+    # via cLLiMate (setup.py)
 h11==0.14.0
     # via uvicorn
 idna==3.4
-    # via anyio
+    # via
+    #   anyio
+    #   requests
+    #   yarl
 joblib==1.2.0
-    # via scikit-learn
+    # via
+    #   nltk
+    #   scikit-learn
 kiwisolver==1.4.4
     # via matplotlib
 matplotlib==3.6.3
+    # via cLLiMate (setup.py)
+miniful==0.0.6
+    # via fst-pso
+multidict==6.0.4
+    # via
+    #   aiohttp
+    #   yarl
+nltk==3.8.1
     # via cLLiMate (setup.py)
 numpy==1.24.2
     # via
     #   cLLiMate (setup.py)
     #   contourpy
+    #   fst-pso
+    #   fuzzytm
+    #   gensim
     #   matplotlib
     #   pandas
     #   pyarrow
+    #   pyfume
     #   scikit-learn
     #   scipy
+    #   simpful
+openai==0.26.5
+    # via cLLiMate (setup.py)
 packaging==23.0
     # via matplotlib
 pandas==1.5.3
-    # via cLLiMate (setup.py)
+    # via
+    #   cLLiMate (setup.py)
+    #   fuzzytm
 pillow==9.4.0
     # via matplotlib
 pyarrow==11.0.0
     # via cLLiMate (setup.py)
 pydantic==1.10.4
     # via fastapi
+pyfume==0.2.25
+    # via fuzzytm
 pyparsing==3.0.9
     # via matplotlib
 python-dateutil==2.8.2
@@ -53,12 +103,27 @@ python-dateutil==2.8.2
     #   pandas
 pytz==2022.7.1
     # via pandas
+regex==2022.10.31
+    # via nltk
+requests==2.28.2
+    # via
+    #   openai
+    #   simpful
 scikit-learn==1.2.1
     # via cLLiMate (setup.py)
 scipy==1.10.0
-    # via scikit-learn
+    # via
+    #   fuzzytm
+    #   gensim
+    #   pyfume
+    #   scikit-learn
+    #   simpful
+simpful==2.9.0
+    # via pyfume
 six==1.16.0
     # via python-dateutil
+smart-open==6.3.0
+    # via gensim
 sniffio==1.3.0
     # via anyio
 starlette==0.24.0
@@ -66,8 +131,15 @@ starlette==0.24.0
 threadpoolctl==3.1.0
     # via scikit-learn
 tqdm==4.64.1
-    # via cLLiMate (setup.py)
+    # via
+    #   cLLiMate (setup.py)
+    #   nltk
+    #   openai
 typing-extensions==4.4.0
     # via pydantic
+urllib3==1.26.14
+    # via requests
 uvicorn==0.20.0
     # via cLLiMate (setup.py)
+yarl==1.8.2
+    # via aiohttp
