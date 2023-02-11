@@ -3,7 +3,17 @@ steps:
     args: ["compose", "pull"]
   - &build
     name: "gcr.io/cloud-builders/docker"
-    args: ["compose", "build"]
+    args:
+      [
+        "compose",
+        "build",
+        "--build-arg",
+        "COMMIT_SHA=${SHORT_SHA}",
+        "--build-arg",
+        "REF_NAME=${REF_NAME}",
+        "--build-arg",
+        "NAMESPACE=${_NAMESPACE}",
+      ]
   - &push
     name: "gcr.io/cloud-builders/docker"
     args: ["compose", "push"]
