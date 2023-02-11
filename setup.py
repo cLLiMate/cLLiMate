@@ -13,11 +13,11 @@ setuptools.setup(
         "scikit-learn",
         "tqdm",
         "pyarrow",
-        "flask",
+        "fastapi",
     ],
     extras_require={
         "prod": [
-            "gunicorn",
+            "uvicorn",
         ]
     },
 )
