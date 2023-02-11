@@ -1,0 +1,48 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "pull"]
+  - &build
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "compose",
+        "build",
+        "--build-arg",
+        "VITE_STATIC_HOST=${_VITE_STATIC_HOST}",
+        "--build-arg",
+        "COMMIT_SHA=${SHORT_SHA}",
+        "--build-arg",
+        "REF_NAME=${REF_NAME}",
+        "--build-arg",
+        "NAMESPACE=${_NAMESPACE}",
+      ]
+  - &push
+    name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "push"]
+  - <<: *build
+    env: [TAG=$REF_NAME]
+  - <<: *push
+    env: [TAG=$REF_NAME]
+  - <<: *build
+    env: [TAG=$_NAMESPACE]
+  - <<: *push
+    env: [TAG=$_NAMESPACE]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "$PROJECT_ID-$_NAMESPACE",
+        "--image",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/site:$_NAMESPACE",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+      ]
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/site:$REF_NAME"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/site:$_NAMESPACE"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/site:latest"
+options:
+  logging: CLOUD_LOGGING_ONLY

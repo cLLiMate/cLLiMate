@@ -29,3 +29,11 @@ gsutil -m rsync -r gs://cllimate/data/ data/
 # upload data using rsync
 gsutil rsync -r data/ gs://cllimate/data/
 ```
+
+## setting up docker
+
+You will need to add the artifact registry to your docker config:
+
+```bash
+gcloud auth configure-docker us-central1-docker.pkg.dev
+```

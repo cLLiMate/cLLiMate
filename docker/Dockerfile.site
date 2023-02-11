@@ -1,0 +1,21 @@
+FROM node:18
+
+WORKDIR /site
+COPY ./site/package* ./
+RUN npm install
+
+COPY ./site ./
+
+ARG VITE_STATIC_HOST=https://storage.googleapis.com/cllimate
+ARG COMMIT_SHA=unknown
+ARG REF_NAME=unknown
+ARG NAMESPACE=development
+
+ENV VITE_STATIC_HOST=${VITE_STATIC_HOST}
+ENV COMMIT_SHA=${COMMIT_SHA}
+ENV REF_NAME=${REF_NAME}
+ENV NAMESPACE=${NAMESPACE}
+
+ENV PORT=${PORT:-8000}
+RUN npm run build
+CMD node build/index.js
