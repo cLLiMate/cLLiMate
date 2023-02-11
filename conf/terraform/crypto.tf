@@ -43,8 +43,13 @@ data "sops_file" "default" {
   source_file = each.value
 }
 
-resource "google_secret_manager_secret" "default" {
-  for_each  = local.filenames
+locals {
+  token_data = data.sops_file.default["tokens_json"].data
+  token_keys = toset(nonsensitive(keys(local.token_data)))
+}
+
+resource "google_secret_manager_secret" "tokens" {
+  for_each  = local.token_keys
   secret_id = each.key
   replication {
     automatic = true
@@ -52,15 +57,15 @@ resource "google_secret_manager_secret" "default" {
   depends_on = [google_project_service.default["secretmanager"]]
 }
 
-resource "google_secret_manager_secret_version" "default" {
-  for_each    = local.filenames
-  secret      = google_secret_manager_secret.default[each.key].id
-  secret_data = data.sops_file.default[each.key].raw
+resource "google_secret_manager_secret_version" "tokens" {
+  for_each    = local.token_keys
+  secret      = google_secret_manager_secret.tokens[each.key].id
+  secret_data = local.token_data[each.key]
 }
 
-resource "google_secret_manager_secret_iam_binding" "binding" {
-  for_each  = local.filenames
-  secret_id = google_secret_manager_secret.default[each.key].secret_id
+resource "google_secret_manager_secret_iam_binding" "tokens-binding" {
+  for_each  = local.token_keys
+  secret_id = google_secret_manager_secret.tokens[each.key].secret_id
   role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${data.google_compute_default_service_account.default.email}",
