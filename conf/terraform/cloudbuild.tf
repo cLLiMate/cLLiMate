@@ -21,6 +21,10 @@ resource "google_cloudbuild_trigger" "default" {
       branch          = "^main$"
       substitutions   = { _NAMESPACE = "live" }
     }
+    deploy-api = {
+      branch          = "^main$"
+      substitutions   = { _NAMESPACE = "live" }
+    }
   }
   name = each.key
   github {
