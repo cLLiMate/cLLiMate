@@ -1,6 +1,18 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
+import replace from "@rollup/plugin-replace";
 
-export default defineConfig({
-  plugins: [sveltekit()]
-});
+let replaceVersion = () =>
+  replace({
+    __VERSION__: process.env.npm_package_version,
+    __BUILD_TIME__: new Date().toISOString(),
+    __COMMIT_SHA__: process.env.COMMIT_SHA || "unknown",
+    __REF_NAME__: process.env.REF_NAME || "unknown",
+    __NAMESPACE__: process.env.NAMESPACE || "development",
+    preventAssignment: true
+  });
+
+const config = {
+  plugins: [sveltekit(), replaceVersion()]
+};
+
+export default config;
