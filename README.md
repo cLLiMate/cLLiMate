@@ -38,6 +38,18 @@ You will need to add the artifact registry to your docker config:
 gcloud auth configure-docker us-central1-docker.pkg.dev
 ```
 
+To build run all of the services:
+
+```bash
+docker compose build
+docker compose up
+```
+
+The services will be available at:
+
+- http://localhost:4001 for the api backend
+- http://localhost:4002 for the frontend
+
 ### setting up secrets
 
 Install sops and activate application-default credentials:
@@ -59,4 +71,14 @@ Source the following script to set up the environment variables:
 
 ```bash
 source scripts/setup-secrets.sh
+```
+
+It might be useful to add the following to the top of your notebook if you need to add a secret to the environment:
+
+```python
+%load_ext autoreload
+%autoreload 2
+
+from cllimate.secrets import load_sops_secret
+load_sops_secret()
 ```
