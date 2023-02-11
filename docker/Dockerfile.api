@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 COPY . ./
 RUN pip install -e .
 ENV PORT=${PORT:-8000}
-CMD uvicorn cllimate.api:app
+CMD uvicorn cllimate.api:app --host 0.0.0.0 --port ${PORT}
