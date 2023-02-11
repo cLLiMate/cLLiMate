@@ -1,0 +1,36 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "pull"]
+  - &build
+    name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "build"]
+  - &push
+    name: "gcr.io/cloud-builders/docker"
+    args: ["compose", "push"]
+  - <<: *build
+    env: [TAG=$REF_NAME]
+  - <<: *push
+    env: [TAG=$REF_NAME]
+  - <<: *build
+    env: [TAG=$_NAMESPACE]
+  - <<: *push
+    env: [TAG=$_NAMESPACE]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "$PROJECT_ID-api-$_NAMESPACE",
+        "--image",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/api:$_NAMESPACE",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+      ]
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/api:$REF_NAME"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/api:$_NAMESPACE"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/api:latest"
+options:
+  logging: CLOUD_LOGGING_ONLY
