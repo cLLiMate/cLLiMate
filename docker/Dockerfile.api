@@ -7,5 +7,14 @@ RUN pip install -r requirements.txt
 
 COPY . ./
 RUN pip install -e .
+
+ARG COMMIT_SHA=unknown
+ARG REF_NAME=unknown
+ARG NAMESPACE=development
+
+ENV COMMIT_SHA=${COMMIT_SHA}
+ENV REF_NAME=${REF_NAME}
+ENV NAMESPACE=${NAMESPACE}
 ENV PORT=${PORT:-8000}
+
 CMD uvicorn cllimate.api:app --host 0.0.0.0 --port ${PORT}
