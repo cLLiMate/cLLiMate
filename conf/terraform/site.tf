@@ -31,6 +31,18 @@ resource "google_cloud_run_v2_service" "api" {
     }
     containers {
       image = "${local.region}-docker.pkg.dev/${local.project_id}/${local.project_id}/api:${each.key}"
+      dynamic "env" {
+        for_each = local.token_keys
+        content {
+          name  = env.key
+          value_source {
+            secret_key_ref {
+              secret = google_secret_manager_secret.tokens[env.key].secret_id
+              version = google_secret_manager_secret_version.tokens[env.key].version
+            }
+          }
+        }
+      }
     }
   }
 
