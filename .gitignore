@@ -1,0 +1,14 @@
+dist/
+node_modules/
+.terraform/
+.ipynb_checkpoints/
+.DS_Store
+venv/
+.vscode/
+*.egg-info/
+dask-worker-space/
+__pycache__/
+.env
+
+# except for .gitkeep files in data
+data/
