@@ -4,7 +4,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 router = APIRouter()
 
 
-@router.get("/chat")
+@router.post("/chat")
 def chat(From: str = Form(...), Body: str = Form(...)):
     response = MessagingResponse()
     msg = response.message(f"Hi {From}, you said: {Body}")
