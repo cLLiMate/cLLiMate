@@ -30,10 +30,33 @@ gsutil -m rsync -r gs://cllimate/data/ data/
 gsutil rsync -r data/ gs://cllimate/data/
 ```
 
-## setting up docker
+### setting up docker
 
 You will need to add the artifact registry to your docker config:
 
 ```bash
 gcloud auth configure-docker us-central1-docker.pkg.dev
+```
+
+### setting up secrets
+
+Install sops and activate application-default credentials:
+
+```bash
+brew install sops
+gcloud auth application-default login
+```
+
+Then decrypt the secrets:
+
+```bash
+sops -d conf/secrets/tokens.json
+```
+
+To edit secrets, remove the `-d` flag.
+
+Source the following script to set up the environment variables:
+
+```bash
+source scripts/setup-secrets.sh
 ```
