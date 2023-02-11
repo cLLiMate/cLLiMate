@@ -14,6 +14,9 @@ setuptools.setup(
         "tqdm",
         "pyarrow",
         "fastapi",
+        "gensim",
+        "nltk",
+        "openai",
     ],
     extras_require={
         "prod": [
