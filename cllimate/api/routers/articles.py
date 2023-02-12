@@ -1,11 +1,14 @@
 import functools
 import os
+import pickle
 from typing import Union
+from urllib.request import urlopen
 
 import numpy as np
 import pandas as pd
 from fastapi import APIRouter
 from pydantic import BaseModel
+from sklearn.neighbors import NearestNeighbors
 
 from cllimate.nlp import embed_sentence, get_glove_vector
 
@@ -16,19 +19,36 @@ class EmbedRequest(BaseModel):
     text: str
 
 
+@functools.lru_cache(maxsize=16)
 def _embed(text: str) -> np.ndarray:
     gv = get_glove_vector()
     return embed_sentence(gv, text)
 
 
-def _get_article_df() -> pd.DataFrame:
+def _get_base_url() -> str:
     try:
         base_url = os.environ["VITE_STATIC_HOST"]
     except KeyError:
         raise ValueError("VITE_STATIC_HOST is not set")
+    return base_url
 
+
+@functools.cache
+def _get_article_df() -> pd.DataFrame:
+    base_url = _get_base_url()
     df = pd.read_parquet(f"{base_url}/data/processed/news-consolidated-v2.parquet")
     return df
+
+
+@functools.cache
+def _get_knn_model(model_name) -> NearestNeighbors:
+    # load model from disk by unpickling from a remote URL
+    base_url = _get_base_url()
+    try:
+        model = pickle.load(urlopen(f"{base_url}/data/models/knn/v1/{model_name}.pkl"))
+    except:
+        raise ValueError(f"Model {model_name} not found")
+    return model
 
 
 class ArticleResponse(BaseModel):
@@ -40,6 +60,19 @@ class ArticleResponse(BaseModel):
     url: str
     sentiment_score: float
     sentiment_label: str
+
+
+class ArticleSearchResponse(BaseModel):
+    """The same as a single article, but without the embedding and with the index + distance"""
+
+    id: int
+    source: str
+    date: str
+    headline: str
+    url: str
+    sentiment_score: float
+    sentiment_label: str
+    distance: float
 
 
 @router.post("/embed")
@@ -54,3 +87,16 @@ def get_article(article_id: int) -> ArticleResponse:
     entry["date"] = entry["date"].strftime("%Y-%m-%d")
     entry["embedding"] = entry["embedding"].tolist()
     return entry
+
+
+@router.post("/search")
+def search(request: EmbedRequest, label: str = "all") -> list[ArticleResponse]:
+    embedding = _embed(request.text)
+    model = _get_knn_model(label)
+    distances, indices = model.kneighbors([embedding])
+
+    df = _get_article_df()
+    subset = df.iloc[indices[0]].drop(columns=["embedding"])
+    subset["distance"] = distances[0]
+    subset["date"] = subset["date"].dt.strftime("%Y-%m-%d")
+    return subset.to_dict(orient="records")
