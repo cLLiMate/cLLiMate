@@ -52,6 +52,7 @@ def _get_knn_model(model_name) -> NearestNeighbors:
         raise ValueError(f"Model {model_name} not found, {url}")
     return model
 
+
 def search_for_articles(
     text: str, n_neighbors: int = 20, label: str = "all"
 ) -> list[dict]:
@@ -64,6 +65,7 @@ def search_for_articles(
     subset["distance"] = distances[0]
     subset["date"] = subset["date"].dt.strftime("%Y-%m-%d")
     return subset.to_dict(orient="records")
+
 
 class ArticleResponse(BaseModel):
     id: int
@@ -106,6 +108,5 @@ def get_article(article_id: int) -> ArticleResponse:
 @router.post("/search")
 def search(
     request: EmbedRequest, n_neighbors: int = 20, label: str = "all"
-) -> list[ArticleResponse]:
+) -> list[ArticleSearchResponse]:
     return search_for_articles(request.text, n_neighbors, label)
-
