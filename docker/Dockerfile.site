@@ -7,11 +7,13 @@ RUN npm install
 COPY ./site ./
 
 ARG VITE_STATIC_HOST=https://storage.googleapis.com/cllimate
+ARG VITE_API_HOST=https://api.cllimate.tech
 ARG COMMIT_SHA=unknown
 ARG REF_NAME=unknown
 ARG NAMESPACE=development
 
 ENV VITE_STATIC_HOST=${VITE_STATIC_HOST}
+ENV VITE_API_HOST=${VITE_API_HOST}
 ENV COMMIT_SHA=${COMMIT_SHA}
 ENV REF_NAME=${REF_NAME}
 ENV NAMESPACE=${NAMESPACE}

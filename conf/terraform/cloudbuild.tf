@@ -42,6 +42,7 @@ resource "google_cloudbuild_trigger" "default" {
     lookup(each.value, "substitutions", {}),
     {
       _VITE_STATIC_HOST = "https://storage.googleapis.com/${google_storage_bucket.default.name}",
+      _VITE_API_HOST = "https://api.cLLiMate.tech"
       _REGION           = local.region
   })
   service_account = google_service_account.cloudbuild.id
