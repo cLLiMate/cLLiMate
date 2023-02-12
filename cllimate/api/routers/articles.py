@@ -2,10 +2,10 @@ import functools
 import os
 import pickle
 from typing import Union
-from urllib.request import urlopen
 
 import numpy as np
 import pandas as pd
+import requests
 from fastapi import APIRouter
 from pydantic import BaseModel
 from sklearn.neighbors import NearestNeighbors
@@ -44,10 +44,12 @@ def _get_article_df() -> pd.DataFrame:
 def _get_knn_model(model_name) -> NearestNeighbors:
     # load model from disk by unpickling from a remote URL
     base_url = _get_base_url()
+    url = f"{base_url}/data/models/knn/v1/{model_name}.pkl"
     try:
-        model = pickle.load(urlopen(f"{base_url}/data/models/knn/v1/{model_name}.pkl"))
+        r = requests.get(url, allow_redirects=True, stream=True)
+        model = pickle.load(r.raw)
     except:
-        raise ValueError(f"Model {model_name} not found")
+        raise ValueError(f"Model {model_name} not found, {url}")
     return model
 
 
@@ -91,8 +93,8 @@ def get_article(article_id: int) -> ArticleResponse:
 
 @router.post("/search")
 def search(request: EmbedRequest, label: str = "all") -> list[ArticleResponse]:
-    embedding = _embed(request.text)
     model = _get_knn_model(label)
+    embedding = _embed(request.text)
     distances, indices = model.kneighbors([embedding])
 
     df = _get_article_df()
