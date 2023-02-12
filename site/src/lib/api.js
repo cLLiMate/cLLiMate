@@ -1,4 +1,4 @@
-function build_path(base_url, path, client = false) {
+export function build_path(base_url, path, client = false) {
   // if we request the content from the client directly, we need to account
   // for the nginx name from outside the docker netweork
   if (client) {
@@ -17,4 +17,15 @@ export async function get({ url, params, fetch }, base_url) {
     console.log(`backend fetching ${redirect_url}`);
     return await fetch(redirect_url);
   }
+}
+
+export async function post({ body, fetch, params }, base_url) {
+  let redirect_url = build_path(base_url, params.slug);
+  return await fetch(redirect_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: body
+  });
 }

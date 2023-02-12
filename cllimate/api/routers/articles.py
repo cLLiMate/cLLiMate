@@ -92,10 +92,12 @@ def get_article(article_id: int) -> ArticleResponse:
 
 
 @router.post("/search")
-def search(request: EmbedRequest, label: str = "all") -> list[ArticleResponse]:
+def search(
+    request: EmbedRequest, n_neighbors: int = 20, label: str = "all"
+) -> list[ArticleResponse]:
     model = _get_knn_model(label)
     embedding = _embed(request.text)
-    distances, indices = model.kneighbors([embedding])
+    distances, indices = model.kneighbors([embedding], n_neighbors=n_neighbors)
 
     df = _get_article_df()
     subset = df.iloc[indices[0]].drop(columns=["embedding"])
