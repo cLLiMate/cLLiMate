@@ -19,6 +19,8 @@ services:
     ports:
       - "4001:4001"
     restart: always
+    depends_on:
+      - nginx
     volumes:
       - ./:/app
       - ${GCLOUD_CONFIG_PATH:-~/.config/gcloud}:/root/.config/gcloud
