@@ -5,10 +5,12 @@ RUN pip install wheel
 ADD requirements.txt ./
 RUN pip install -r requirements.txt
 RUN python -m gensim.downloader --download glove-wiki-gigaword-50
+RUN python -m nltk.downloader stopwords && \
+    python -m nltk.downloader wordnet && \
+    python -m nltk.downloader omw-1.4
 
 COPY . ./
 RUN pip install -e .
-RUN python -c "from cllimate.nlp import init_nltk; init_nltk();"
 
 ARG VITE_STATIC_HOST=https://storage.googleapis.com/cllimate
 ARG COMMIT_SHA=unknown
