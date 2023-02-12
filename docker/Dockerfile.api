@@ -10,10 +10,12 @@ COPY . ./
 RUN pip install -e .
 RUN python -c "from cllimate.nlp import init_nltk; init_nltk();"
 
+ARG VITE_STATIC_HOST=https://storage.googleapis.com/cllimate
 ARG COMMIT_SHA=unknown
 ARG REF_NAME=unknown
 ARG NAMESPACE=development
 
+ENV VITE_STATIC_HOST=${VITE_STATIC_HOST}
 ENV COMMIT_SHA=${COMMIT_SHA}
 ENV REF_NAME=${REF_NAME}
 ENV NAMESPACE=${NAMESPACE}
