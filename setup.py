@@ -18,7 +18,7 @@ setuptools.setup(
         "nltk",
         "openai",
         "twilio",
-        "python-multipart"
+        "python-multipart",
     ],
     extras_require={
         "prod": [
