@@ -12,3 +12,4 @@ __pycache__/
 
 # except for .gitkeep files in data
 data/
+!site/src/**/data/
