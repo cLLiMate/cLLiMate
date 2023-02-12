@@ -25,6 +25,9 @@
     "sustainable fashion"
   ];
 
+  let histogram_fields = ["date", "source", "sentiment_score", "sentiment_label", "distance"];
+  let histogram_field = "date";
+
   function randomPhrase() {
     return phrases[Math.floor(Math.random() * phrases.length)];
   }
@@ -93,23 +96,22 @@
     <div>
       <Table {data} {options} />
     </div>
+    <div class="radio">
+      {#each histogram_fields as field}
+        <label>
+          <input type="radio" bind:group={histogram_field} value={field} />{field}
+        </label>
+      {/each}
+    </div>
     <div class="plots">
       <Plot
         {data}
-        transform={(d) => [{ x: d.map((r) => r.distance), type: "histogram" }]}
+        transform={(d) => [{ x: d.map((r) => r[histogram_field]), type: "histogram" }]}
         layout={{
-          title: "Histogram of article distances (cosine)",
-          xaxis: { title: "distances" },
-          yaxis: { title: "Number of articles" }
-        }}
-      />
-      <Plot
-        {data}
-        transform={(d) => [{ x: d.map((r) => r.sentiment_score), type: "histogram" }]}
-        layout={{
-          title: "Histogram of article sentiment scores",
-          xaxis: { title: "sentiment scores" },
-          yaxis: { title: "Number of articles" }
+          title: `Histogram of ${histogram_field}`,
+          xaxis: { title: histogram_field },
+          yaxis: { title: "Number of articles" },
+          height: 300
         }}
       />
     </div>
@@ -133,5 +135,9 @@
   .searchbar button {
     font-size: 1.5rem;
     margin-left: 1rem;
+  }
+  .radio {
+    display: flex;
+    border: 1px solid black;
   }
 </style>
