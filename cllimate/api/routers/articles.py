@@ -52,6 +52,18 @@ def _get_knn_model(model_name) -> NearestNeighbors:
         raise ValueError(f"Model {model_name} not found, {url}")
     return model
 
+def search_for_articles(
+    text: str, n_neighbors: int = 20, label: str = "all"
+) -> list[dict]:
+    model = _get_knn_model(label)
+    embedding = _embed(text)
+    distances, indices = model.kneighbors([embedding], n_neighbors=n_neighbors)
+
+    df = _get_article_df()
+    subset = df.iloc[indices[0]].drop(columns=["embedding"])
+    subset["distance"] = distances[0]
+    subset["date"] = subset["date"].dt.strftime("%Y-%m-%d")
+    return subset.to_dict(orient="records")
 
 class ArticleResponse(BaseModel):
     id: int
@@ -95,12 +107,5 @@ def get_article(article_id: int) -> ArticleResponse:
 def search(
     request: EmbedRequest, n_neighbors: int = 20, label: str = "all"
 ) -> list[ArticleResponse]:
-    model = _get_knn_model(label)
-    embedding = _embed(request.text)
-    distances, indices = model.kneighbors([embedding], n_neighbors=n_neighbors)
+    return search_for_articles(request.text, n_neighbors, label)
 
-    df = _get_article_df()
-    subset = df.iloc[indices[0]].drop(columns=["embedding"])
-    subset["distance"] = distances[0]
-    subset["date"] = subset["date"].dt.strftime("%Y-%m-%d")
-    return subset.to_dict(orient="records")
