@@ -42,7 +42,8 @@
       { field: "embedding", visible: false },
       { field: "headline", formatter: "link", formatterParams: { urlField: "url" } },
       { field: "url", visible: false },
-      { field: "sentiment_score", formatter: (cell) => cell.getValue().toFixed(4) }
+      { field: "sentiment_score", formatter: (cell) => cell.getValue().toFixed(4) },
+      { field: "distance", formatter: (cell) => cell.getValue().toFixed(4) }
     ]
   };
 </script>
