@@ -1,7 +1,16 @@
+<script>
+    import SearchInterface from "./search/SearchInterface.svelte";
+</script>
+
 # cLLiMate
 
-Large language models for sustainable climate data science.
+An NLP powered climate news search engine.
+See our [analysis of climate news](/analysis) and the dedicated [search page](/search).
 
-See the [search page](./search) to look for similar articles.
+Start typing to search for news articles.
+
+<SearchInterface />
+
+<br/>
 
 ![Alt text](/logo.svg)

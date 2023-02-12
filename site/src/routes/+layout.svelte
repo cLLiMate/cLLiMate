@@ -14,6 +14,7 @@
     <div>
       <a href="/">[ home ]</a>
       <a href="/search">[ search ]</a>
+      <a href="/analysis">[ analysis ]</a>
       <a href="/api/v1/docs?client=true">[ openapi ]</a>
       <a href={github_url}>[ github ]</a>
     </div>
@@ -39,5 +40,8 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap-reverse;
+  }
+  main {
+    margin-bottom: 1rem;
   }
 </style>
