@@ -15,6 +15,7 @@
       <a href="/">[ home ]</a>
       <a href="/search">[ search ]</a>
       <a href="/analysis">[ analysis ]</a>
+      <a href="/datasets">[ datasets ]</a>
       <a href="/api/v1/docs?client=true">[ openapi ]</a>
       <a href={github_url}>[ github ]</a>
     </div>
