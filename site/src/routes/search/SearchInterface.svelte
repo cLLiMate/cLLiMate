@@ -28,8 +28,8 @@
     return phrases[Math.floor(Math.random() * phrases.length)];
   }
 
-  async function search(text) {
-    let url = build_path(import.meta.env.VITE_API_HOST, "articles/search", true);
+  async function search(text, k = 100) {
+    let url = build_path(import.meta.env.VITE_API_HOST, `articles/search?n_neighbors=${k}`, true);
     let resp = await fetch(url, {
       method: "POST",
       headers: {
@@ -58,6 +58,9 @@
 
   $: options = {
     autoColumns: true,
+    pagination: "local",
+    paginationSize: 10,
+    paginationCounter: "rows",
     autoColumnsDefinitions: [
       { field: "embedding", visible: false },
       { field: "headline", formatter: "link", formatterParams: { urlField: "url" } },
@@ -86,7 +89,9 @@
   </div>
 {:then}
   {#if data}
-    <Table {data} {options} />
+    <div>
+      <Table {data} {options} />
+    </div>
   {/if}
 {/await}
 
