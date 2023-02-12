@@ -28,4 +28,4 @@ repos:
     hooks:
       - id: codespell
         args: [--ignore-words=.dictionary.txt]
-        exclude: (package.*.json|.ipynb)$
+        exclude: (package.*.json|.ipynb|.svg)$
