@@ -8,6 +8,26 @@
   let data;
   let loaded = false;
 
+  const phrases = [
+    "reduce, reuse, recycle",
+    "ocean acidification",
+    "climate change",
+    "sustainable living practices",
+    "renewable energy revolution",
+    "green transportation",
+    "climate justice movement",
+    "agriculture and food systems",
+    "carbon capture and storage",
+    "carbon sequestration",
+    "ocean cleanup",
+    "plastic pollution",
+    "sustainable fashion"
+  ];
+
+  function randomPhrase() {
+    return phrases[Math.floor(Math.random() * phrases.length)];
+  }
+
   async function search(text) {
     let url = build_path(import.meta.env.VITE_API_HOST, "articles/search", true);
     let resp = await fetch(url, {
@@ -49,7 +69,15 @@
 </script>
 
 <div class="searchbar">
-  <input type="text" bind:value={text} placeholder="ocean acidification" disabled={!loaded} />
+  <input
+    type="text"
+    bind:value={text}
+    placeholder={`search: ${randomPhrase()}`}
+    disabled={!loaded}
+  />
+  <button on:click={() => (text = loaded ? randomPhrase() : "loading search...")}
+    >search random</button
+  >
 </div>
 
 {#await testReadyForSearch()}
@@ -71,12 +99,13 @@
   }
   .searchbar {
     display: flex;
-    justify-content: center;
-    margin: 1rem;
   }
   .searchbar input {
     width: 100%;
-    padding: 0.5rem;
     font-size: 1.5rem;
+  }
+  .searchbar button {
+    font-size: 1.5rem;
+    margin-left: 1rem;
   }
 </style>
