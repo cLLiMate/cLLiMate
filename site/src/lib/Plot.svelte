@@ -21,13 +21,13 @@
           },
           layout
         ),
-        { responsive: true }
+        { responsive: false }
       );
     } catch (e) {
       console.log(e);
     }
   }
-  $: plotElement && data && data.length && onLoad();
+  $: plotElement && data && data.length && layout && onLoad();
 </script>
 
 <svelte:head>
