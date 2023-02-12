@@ -14,3 +14,10 @@ Start typing to search for news articles.
 <br/>
 
 ![Alt text](/logo.svg)
+
+<style>
+img {
+    width: 100%;
+    height: auto;
+}
+</style>
