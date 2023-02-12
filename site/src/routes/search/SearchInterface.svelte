@@ -3,6 +3,7 @@
   import { build_path } from "$lib/api.js";
   import Table from "$lib/Table.svelte";
   import { DoubleBounce } from "svelte-loading-spinners";
+  import Plot from "$lib/Plot.svelte";
 
   let text = null;
   let data;
@@ -91,6 +92,26 @@
   {#if data}
     <div>
       <Table {data} {options} />
+    </div>
+    <div class="plots">
+      <Plot
+        {data}
+        transform={(d) => [{ x: d.map((r) => r.distance), type: "histogram" }]}
+        layout={{
+          title: "Histogram of article distances (cosine)",
+          xaxis: { title: "distances" },
+          yaxis: { title: "Number of articles" }
+        }}
+      />
+      <Plot
+        {data}
+        transform={(d) => [{ x: d.map((r) => r.sentiment_score), type: "histogram" }]}
+        layout={{
+          title: "Histogram of article sentiment scores",
+          xaxis: { title: "sentiment scores" },
+          yaxis: { title: "Number of articles" }
+        }}
+      />
     </div>
   {/if}
 {/await}
