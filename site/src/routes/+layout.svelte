@@ -4,20 +4,30 @@
 
   export let data;
   let github_url = "https://github.com/cLLiMate/cLLiMate";
-  $: client_status = data && data.client_status;
-  $: build_time = client_status && DateTime.fromISO(client_status.build_time);
+  $: site_status = data && data.site_status;
+  $: api_status = data && data.api_status;
+  $: build_time = site_status && DateTime.fromISO(site_status.build_time);
 </script>
 
 <main class="container">
   <nav class="box">
     <div>
       <a href="/">[ home ]</a>
+      <a href="/api/v1/docs?client=true">[ openapi ]</a>
       <a href={github_url}>[ github ]</a>
     </div>
-    {#if client_status}
+    {#if site_status && api_status}
       <div>
-        <b>app</b>:
-        <a href="{github_url}/commit/{client_status.commit_sha}">v{client_status.version}</a>
+        <b>site</b>:
+        <a
+          title={JSON.stringify(site_status, "", 2)}
+          href="{github_url}/commit/{site_status.commit_sha}">v{site_status.version}</a
+        >
+        <b>api</b>:
+        <a
+          title={JSON.stringify(api_status, "", 2)}
+          href="{github_url}/commit/{api_status.commit_sha}">v{api_status.version}</a
+        >
         <b>build time</b>: {build_time.toLocaleString(DateTime.DATETIME_MED)}
       </div>
     {/if}
