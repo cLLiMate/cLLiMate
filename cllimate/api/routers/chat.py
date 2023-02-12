@@ -11,5 +11,5 @@ def chat(From: str = Form(...), Body: str = Form(...)):
     msg = response.message(f"Hi {From}!")
     a = search_for_articles(Body, n_neighbors=5)
     for i in a:
-        msg = response.message(i['headline'] + "\n")
+        msg = response.message(i['headline'] + "\n" + i['url'])
     return Response(content=str(response), media_type="application/xml")
