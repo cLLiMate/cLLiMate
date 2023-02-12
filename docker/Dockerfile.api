@@ -4,9 +4,11 @@ WORKDIR /app
 RUN pip install wheel
 ADD requirements.txt ./
 RUN pip install -r requirements.txt
+RUN python -m gensim.downloader --download glove-wiki-gigaword-50
 
 COPY . ./
 RUN pip install -e .
+RUN python -c "from cllimate.nlp import init_nltk; init_nltk();"
 
 ARG COMMIT_SHA=unknown
 ARG REF_NAME=unknown

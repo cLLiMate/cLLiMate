@@ -1,6 +1,7 @@
+import functools
+
+import gensim.downloader
 import nltk
-from gensim.corpora import Dictionary
-from gensim.models import LdaModel
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tokenize import RegexpTokenizer
@@ -23,3 +24,14 @@ def process_sentence(sentences):
         tokens = [token.lower() for token in tokens if token not in stop_words]
         tokens = [lemmatizer.lemmatize(token) for token in tokens]
         yield tokens
+
+
+@functools.cache
+def get_glove_vector(model_name="glove-wiki-gigaword-50"):
+    return gensim.downloader.load(model_name)
+
+
+def embed_sentence(glove_vector, sentence):
+    """Embed a sentence into a vector space by averaging them."""
+    tokens = next(process_sentence([sentence]))
+    return glove_vector[[t for t in tokens if t in glove_vector]].mean(axis=0)
