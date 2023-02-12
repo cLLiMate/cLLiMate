@@ -13,20 +13,16 @@
   <nav class="box">
     <div>
       <a href="/">[ home ]</a>
+      <a href="/search">[ search ]</a>
       <a href="/api/v1/docs?client=true">[ openapi ]</a>
       <a href={github_url}>[ github ]</a>
     </div>
     {#if site_status && api_status}
       <div>
-        <b>site</b>:
+        <b>rev</b>:
         <a
-          title={JSON.stringify(site_status, "", 2)}
+          title={JSON.stringify({ site_status, api_status }, "", 2)}
           href="{github_url}/commit/{site_status.commit_sha}">v{site_status.version}</a
-        >
-        <b>api</b>:
-        <a
-          title={JSON.stringify(api_status, "", 2)}
-          href="{github_url}/commit/{api_status.commit_sha}">v{api_status.version}</a
         >
         <b>build time</b>: {build_time.toLocaleString(DateTime.DATETIME_MED)}
       </div>
