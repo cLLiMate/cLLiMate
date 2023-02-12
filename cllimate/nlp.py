@@ -28,6 +28,7 @@ def process_sentence(sentences):
 
 @functools.cache
 def get_glove_vector(model_name="glove-wiki-gigaword-50"):
+    init_nltk()
     return gensim.downloader.load(model_name)
 
 
