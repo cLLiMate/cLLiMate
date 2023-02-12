@@ -8,6 +8,7 @@ RUN python -m gensim.downloader --download glove-wiki-gigaword-50
 RUN python -m nltk.downloader stopwords && \
     python -m nltk.downloader wordnet && \
     python -m nltk.downloader omw-1.4
+RUN cp -r /root/* /home/
 
 COPY . ./
 RUN pip install -e .
