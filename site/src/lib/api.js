@@ -8,7 +8,6 @@ function build_path(base_url, path, client = false) {
 }
 
 export async function get({ url, params, fetch }, base_url) {
-  console.log(base_url);
   let client = url.searchParams.get("client") === "true";
   let redirect_url = build_path(base_url, params.slug, client);
   if (client) {
