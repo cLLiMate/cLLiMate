@@ -13,6 +13,7 @@
     }
   ];
   $: layout = {
+    height: 400,
     title: currentDataset,
     xaxis: {
       title: "Time",
