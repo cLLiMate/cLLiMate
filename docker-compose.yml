@@ -25,6 +25,7 @@ services:
     command: uvicorn cllimate.api:app --port 4001 --host 0.0.0.0 --reload
     environment:
       - TWILIO_AUTH_TOKEN
+      - VITE_STATIC_HOST=http://nginx:4000
   site:
     build:
       dockerfile: docker/Dockerfile.site
