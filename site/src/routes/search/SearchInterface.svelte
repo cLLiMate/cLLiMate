@@ -2,9 +2,13 @@
   import pDebounce from "p-debounce";
   import { build_path } from "$lib/api.js";
   import Table from "$lib/Table.svelte";
+  import { DoubleBounce } from "svelte-loading-spinners";
+
+  let text = null;
+  let data;
+  let loaded = false;
 
   async function search(text) {
-    console.log("searching for", text);
     let url = build_path(import.meta.env.VITE_API_HOST, "articles/search", true);
     let resp = await fetch(url, {
       method: "POST",
@@ -13,12 +17,18 @@
       },
       body: JSON.stringify({ text })
     });
-    let data = await resp.json();
-    return data;
+    return await resp.json();
   }
 
-  let text = null;
-  let data;
+  async function testReadyForSearch() {
+    // We have to load the glove embedding on the backend, which takes 10-20 second on cold start.
+    // We check on this and add a loading indicator until it's ready.
+    await search("test query");
+
+    // set loaded to true to enable the search bar
+    loaded = true;
+  }
+
   let debouncedSearch = pDebounce((text) => {
     search(text).then((res) => {
       data = res;
@@ -33,14 +43,26 @@
 </script>
 
 <div class="searchbar">
-  <input type="text" bind:value={text} placeholder="ocean acidification" />
+  <input type="text" bind:value={text} placeholder="ocean acidification" disabled={!loaded} />
 </div>
 
-{#if data}
-  <Table {data} {options} />
-{/if}
+{#await testReadyForSearch()}
+  <div class="loading">
+    <DoubleBounce size="120" />
+  </div>
+{:then}
+  {#if data}
+    <Table {data} {options} />
+  {/if}
+{/await}
 
 <style>
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
   .searchbar {
     display: flex;
     justify-content: center;
