@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/cLLiMate/cLLiMate/compare/site-v0.4.0...site-v0.5.0) (2023-02-12)
+
+
+### Features
+
+* add dataset page ([2d16cec](https://github.com/cLLiMate/cLLiMate/commit/2d16cece7ca67b6974a5205bfb7fbc26d1e77dac))
+
 ## [0.4.0](https://github.com/cLLiMate/cLLiMate/compare/site-v0.3.0...site-v0.4.0) (2023-02-12)
 
 
